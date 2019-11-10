@@ -7,6 +7,12 @@ shmem *shm;
 
 pid_t id;
 int shmid;
+int fd[2];
+int mq_id;
+
+sem_t *writing_sem;
+sem_t *reading_sem;
+sem_t *mutex;
 
 void create_shm() {
 
@@ -21,8 +27,8 @@ void create_shm() {
 	printf("Shared memory id is %d\n", shmid);
 	printf("Initializing shared memory values now.\n");
 
-	//shm->departures_list = departures_list;
-	//shm->arrival_list = arrival_list;
+	shm->departures_list = listdep;;
+	shm->arrival_list = listarr;
 	shm->total_flights = 0;
 	shm->total_landed_flights = 0;
 	shm->avg_arrival_time = 0.0;
@@ -38,8 +44,62 @@ void create_shm() {
 	return;
 }
 
+void create_mq() {
+	if((mq_id = msgget(IPC_PRIVATE, IPC_CREAT | 0777)) < 0) {
+		perror("Creating message queue.\n");
+		exit(1);
+	}
+
+	printf("Successfully created MQ\n");
+
+	return;
+}
+
+void semaphore_creation() {
+	sem_unlink("WRITING");
+	if((writing_sem = sem_open("WRITING", O_CREAT|O_EXCL, 0700, 0)) == SEM_FAILED) {
+		perror("Creating writing semaphore.\n");
+		exit(1);
+	}
+	printf("Successfully created WRITING semaphore\n");
+	
+	sem_unlink("READING");
+	if((reading_sem = sem_open("READING", O_CREAT|O_EXCL, 0700, READING_SEM_VALUE)) == SEM_FAILED) {
+		perror("Creating reading semaphore.\n");
+		exit(1);
+	}
+	printf("Successfully created READING semaphore\n");
+
+	sem_unlink("MUTEX");
+	if((mutex = sem_open("MUTEX", O_CREAT|O_EXCL, 0700, 1)) == SEM_FAILED) {
+		perror("Creating mutex semaphore.\n");
+		exit(1);
+	}
+	printf("Successfully created MUTEX semaphore\n");
+
+	return;
+}
+
+/* void *arrival_flight_worker() {
+	return;
+}
+
+void *departure_flight_worker() {
+	return;
+} */
+
 void initializer() {
 	create_shm();
+	semaphore_creation();
+	pipe(fd);
+	create_mq();
+
+	return;
+}
+
+void control_tower() {
+
+	printf("Inside control tower.\n");
 
 	return;
 }
@@ -47,6 +107,9 @@ void initializer() {
 void cleanup() {
 	shmdt(shm);
 	shmctl(shmid, IPC_RMID, NULL);
+	sem_unlink("WRITING");
+	sem_unlink("READING");
+	sem_unlink("MUTEX");
 	
 	return;
 }
@@ -58,7 +121,7 @@ int main(void) {
 	id = fork();
 
 	if(id == 0) {
-		//control tower initializer
+		control_tower();
 		printf("Control Tower created with PID %ld.\n", (long)getpid());
 		return 0;
 	}
