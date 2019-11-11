@@ -6,6 +6,7 @@
 #include <semaphore.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <time.h>
 #include <sys/msg.h>
 #include <pthread.h>
@@ -19,6 +20,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 
+#define PIPE_NAME "/tmp/input_pipe"
 #define ARRIVAL_T 8
 #define DEPARTURE_T 8
 #define MAX_ARRIVAL 5

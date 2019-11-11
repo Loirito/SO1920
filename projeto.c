@@ -7,7 +7,7 @@ shmem *shm;
 
 pid_t id;
 int shmid;
-int fd[2];
+int fd_named_pipe;
 int mq_id;
 
 sem_t *writing_sem;
@@ -80,6 +80,16 @@ void semaphore_creation() {
 	return;
 }
 
+void create_named_pipe() {
+	unlink(PIPE_NAME);
+	if((mkfifo(PIPE_NAME, O_CREAT|O_EXCL|0666)<0) && (errno != EEXIST)) {
+		perror("Creating pipe.\n");
+		exit(1);
+	}
+
+	printf("Named pipe %s created successfully!\n", PIPE_NAME);
+}
+
 /* void *arrival_flight_worker() {
 	return;
 }
@@ -88,11 +98,107 @@ void *departure_flight_worker() {
 	return;
 } */
 
+void read_pipe() {
+
+
+	while(1) {
+
+		fd_set read_set;
+		char buffer[256];
+		int buflen = 0;
+		char *token;
+		char idflight[8];
+		int ut = 0, takeoff = 0, eta = 0, fuel = 0, retval = 0;
+
+		if((fd_named_pipe = open(PIPE_NAME, O_RDONLY|O_NONBLOCK))<0) {
+			perror("Opening pipe.\n");
+			exit(1);
+		}
+		else printf("pipe is open.\n");
+
+		FD_ZERO(&read_set);
+		FD_SET(fd_named_pipe, &read_set);
+
+		printf("inside read pipe %d.\n", fd_named_pipe);
+
+		retval = select(fd_named_pipe + 1, &read_set, NULL, NULL, NULL);
+
+		if(retval) {
+			if(FD_ISSET(fd_named_pipe, &read_set)) {
+				printf("[%s] READING.\n", PIPE_NAME);
+					buflen = read(fd_named_pipe, buffer, 256);
+					if(buflen > 0) {
+						buffer[buflen] = '\0';
+					}
+
+					token = strtok(buffer, " ");
+					if(token != NULL && strcmp(token, "DEPARTURE") == 0) {
+						token = strtok(NULL, " ");
+						strcpy(idflight, token);
+						printf("idflight is %s.\n", idflight);
+						token = strtok(NULL, " ");
+						if(strcmp(token, "init:") == 0) {
+							token = strtok(NULL, " ");
+							ut = atoi(token);
+							printf("tempo de entrada no sistema: %d.\n", ut);
+							token = strtok(NULL, " ");
+							if(strcmp(token, "takeoff:") == 0) {
+								token = strtok(NULL, " ");
+								takeoff = atoi(token);
+								printf("takeoff time: %d.\n", takeoff);
+							}
+
+							else perror("command wrong format (takeoff:).\n");
+						}
+
+						else perror("command wrong format (init:).\n");
+
+					}
+
+					else if(token != NULL && strcmp(token, "ARRIVAL") == 0) {
+						token = strtok(NULL, " ");
+						strcpy(idflight, token);
+						printf("idflight is %s.\n", idflight);
+						token = strtok(NULL, " ");
+						if(strcmp(token, "init:") == 0) {
+							token = strtok(NULL, " ");
+							ut = atoi(token);
+							printf("tempo de entrada no sistema: %d.\n", ut);
+							token = strtok(NULL, " ");
+							if(strcmp(token, "eta:") == 0) {
+								token = strtok(NULL, " ");
+								eta = atoi(token);
+								printf("eta: %d.\n", eta);
+								token = strtok(NULL, " ");
+								if(strcmp(token, "fuel:") == 0) {
+									token = strtok(NULL, " ");
+									fuel = atoi(token);
+									printf("fuel: %d.\n", fuel);
+								}
+
+								else perror("command wrong format (fuel).\n");
+							}
+
+							else perror("command wrong format (eta:).\n");
+						}
+
+						else perror("command wrong format (init arr:).\n");
+					}
+
+					else printf("Command is in wrong format (DEP or ARRIVAL).\n");
+			}
+		}
+
+		else if (retval == -1) perror("select()");
+		else printf("No data in 5s.\n");
+	}
+}
+
 void initializer() {
 	create_shm();
 	semaphore_creation();
-	pipe(fd);
 	create_mq();
+	create_named_pipe();
 
 	return;
 }
@@ -114,7 +220,7 @@ void cleanup() {
 	return;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
 
 	initializer();
 
@@ -132,6 +238,7 @@ int main(void) {
 	}
 
 	else {
+		read_pipe();
 		printf("Sim manager here.\n");
 		return 0;
 	}
