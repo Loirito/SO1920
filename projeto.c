@@ -9,6 +9,12 @@ pid_t id;
 int shmid;
 int fd_named_pipe;
 int mq_id;
+int tunit;
+int depduration, depinterval;
+int arrduration, arrinterval;
+int minholding, maxholding;
+int maxdepartures;
+int maxarrivals; 
 
 sem_t *writing_sem;
 sem_t *reading_sem;
@@ -184,7 +190,6 @@ void read_pipe() {
 
 						else perror("command wrong format (init arr:).\n");
 					}
-
 					else printf("Command is in wrong format (DEP or ARRIVAL).\n");
 			}
 		}
@@ -194,7 +199,59 @@ void read_pipe() {
 	}
 }
 
+void read_config() {
+	
+	FILE *fp = fopen("config.txt", "r");
+	if(fp == NULL) {
+		perror("Opening file.");
+		exit(1);
+	}
+	else printf("File opened successfully.\n");
+
+	char *token;
+	char line[256];
+
+	fgets(line, sizeof(line), fp);
+	tunit = atoi(line);
+	printf("tunit: %d\n", tunit);
+
+	fgets(line, sizeof(line), fp);
+	token = strtok(line, ",");
+	depduration = atoi(token);
+	printf("depduration: %d\n", depduration);
+	token = strtok(NULL, " ");
+	depinterval = atoi(token);
+	printf("depinterval: %d\n", depinterval);
+
+	fgets(line, sizeof(line), fp);
+	token = strtok(line, ",");
+	arrduration = atoi(token);
+	printf("arrduration: %d\n", arrduration);
+	token = strtok(NULL, " ");
+	arrinterval = atoi(token);
+	printf("arrinterval: %d\n", arrinterval);
+
+	fgets(line, sizeof(line), fp);
+	token = strtok(line, ",");
+	minholding = atoi(token);
+	printf("minholding: %d\n", minholding);
+	token = strtok(NULL, " ");
+	maxholding = atoi(token);
+	printf("maxholding: %d\n", maxholding);
+
+	fgets(line, sizeof(line), fp);
+	maxdepartures = atoi(line);
+	printf("maxdepartures: %d\n", maxdepartures);
+
+	fgets(line, sizeof(line), fp);
+	maxarrivals = atoi(line);
+	printf("maxarrivals: %d\n", maxarrivals);
+
+	return;
+}
+
 void initializer() {
+	read_config();
 	create_shm();
 	semaphore_creation();
 	create_mq();

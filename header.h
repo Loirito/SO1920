@@ -99,6 +99,9 @@ typedef struct flight_message {
 void create_shm();
 void create_mq();
 void semaphore_creation();
+void create_named_pipe();
+void read_pipe();
+void read_config();
 //void *arrival_flight_worker();
 //void *departure_flight_worker();
 void initializer();
