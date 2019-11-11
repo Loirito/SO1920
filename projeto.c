@@ -5,6 +5,7 @@
 
 shmem *shm;
 
+FILE *logfile;
 pid_t id;
 int shmid;
 int fd_named_pipe;
@@ -16,9 +17,12 @@ int minholding, maxholding;
 int maxdepartures;
 int maxarrivals; 
 
+pthread_t thread;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; 
+
 sem_t *writing_sem;
 sem_t *reading_sem;
-sem_t *mutex;
+sem_t *mutex_sem;
 
 void create_shm() {
 
@@ -33,7 +37,7 @@ void create_shm() {
 	printf("Shared memory id is %d\n", shmid);
 	printf("Initializing shared memory values now.\n");
 
-	shm->departures_list = listdep;;
+	shm->departures_list = listdep;
 	shm->arrival_list = listarr;
 	shm->total_flights = 0;
 	shm->total_landed_flights = 0;
@@ -77,7 +81,7 @@ void semaphore_creation() {
 	printf("Successfully created READING semaphore\n");
 
 	sem_unlink("MUTEX");
-	if((mutex = sem_open("MUTEX", O_CREAT|O_EXCL, 0700, 1)) == SEM_FAILED) {
+	if((mutex_sem = sem_open("MUTEX", O_CREAT|O_EXCL, 0700, 1)) == SEM_FAILED) {
 		perror("Creating mutex semaphore.\n");
 		exit(1);
 	}
@@ -96,13 +100,60 @@ void create_named_pipe() {
 	printf("Named pipe %s created successfully!\n", PIPE_NAME);
 }
 
-/* void *arrival_flight_worker() {
+void open_log() {
+	logfile = fopen("logfile.txt", "a+");
+	if(logfile == NULL) {
+		perror("Opening log file.");
+	}
+
+	printf("log's opened.\n");
 	return;
 }
 
-void *departure_flight_worker() {
+void* arrival_flight_worker(void *arg) {
+	sem_wait(mutex_sem);
+	pthread_mutex_lock(&mutex);
+ 	fprintf(logfile, "Arrival flight created!.\n");
+ 	pthread_mutex_unlock(&mutex);
+ 	sem_post(mutex_sem);
+ 	printf("Arrival flight created!.\n");
+ 	return NULL;
+}
+
+void* departure_flight_worker(void *arg) {
+	sem_wait(mutex_sem);
+	pthread_mutex_lock(&mutex);
+	fprintf(logfile, "Departure flight created.\n");
+	pthread_mutex_unlock(&mutex);
+	sem_post(mutex_sem);
+	printf("Departure flight created.\n");
+	return NULL;
+} 
+
+void create_arrival(char *idflight, int ut, int eta, int fuel) {
+	time_t begintime;
+	begintime = time(NULL);
+	double init = unit_conversion(ut);
+	while((begintime + init) < time(NULL)) {	}
+	pthread_create(&thread, NULL, arrival_flight_worker, NULL);
 	return;
-} */
+}
+
+void create_departure(char *idflight, int ut, int takeoff) {
+	time_t begintime;
+	begintime = time(NULL);
+	double init = unit_conversion(ut);
+	while((begintime + init) > time(NULL)) {	}	
+	pthread_create(&thread, NULL, departure_flight_worker, NULL);
+	return;
+}
+
+double unit_conversion(int ut) {
+	double conv;
+	double newunit = (double)tunit/1000;
+	conv = (double) ut * newunit;
+	return conv;
+}
 
 void read_pipe() {
 
@@ -111,6 +162,7 @@ void read_pipe() {
 
 		fd_set read_set;
 		char buffer[256];
+		char bufcopy[256];
 		int buflen = 0;
 		char *token;
 		char idflight[8];
@@ -136,7 +188,7 @@ void read_pipe() {
 					if(buflen > 0) {
 						buffer[buflen] = '\0';
 					}
-
+					strcpy(bufcopy, buffer);
 					token = strtok(buffer, " ");
 					if(token != NULL && strcmp(token, "DEPARTURE") == 0) {
 						token = strtok(NULL, " ");
@@ -152,12 +204,32 @@ void read_pipe() {
 								token = strtok(NULL, " ");
 								takeoff = atoi(token);
 								printf("takeoff time: %d.\n", takeoff);
+								sem_wait(mutex_sem);
+								printf("inside mutex\n");
+								int n = fprintf(logfile, "NEW COMMAND => %s\n", bufcopy);
+								sem_post(mutex_sem);
+								printf("val fprintf %d\n", n);
+								printf("NEW COMMAND => %s\n", bufcopy);
+								create_departure(idflight, ut, takeoff);
 							}
 
-							else perror("command wrong format (takeoff:).\n");
+							else {
+								perror("command wrong format (takeoff:).\n");
+								sem_wait(mutex_sem);
+								fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+								sem_post(mutex_sem);
+								printf("WRONG COMMAND => %s\n", bufcopy);
+
+							}
 						}
 
-						else perror("command wrong format (init:).\n");
+						else {
+							perror("command wrong format (init:).\n");
+							sem_wait(mutex_sem);
+							fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+							sem_post(mutex_sem);
+							printf("WRONG COMMAND => %s\n", bufcopy);
+						}
 
 					}
 
@@ -180,17 +252,46 @@ void read_pipe() {
 									token = strtok(NULL, " ");
 									fuel = atoi(token);
 									printf("fuel: %d.\n", fuel);
+									sem_wait(mutex_sem);
+									fprintf(logfile, "NEW COMMAND => %s\n", bufcopy);
+									sem_post(mutex_sem);
+									printf("NEW COMMAND => %s\n", bufcopy);
+									create_arrival(idflight, ut, eta, fuel);
 								}
 
-								else perror("command wrong format (fuel).\n");
+								else {
+									perror("command wrong format (fuel).\n");
+									sem_wait(mutex_sem);
+									fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+									sem_post(mutex_sem);
+									printf("WRONG COMMAND => %s\n", bufcopy);
+								}
 							}
 
-							else perror("command wrong format (eta:).\n");
+							else {
+								perror("command wrong format (eta:).\n");
+								sem_wait(mutex_sem);
+								fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+								sem_post(mutex_sem);
+								printf("WRONG COMMAND => %s\n", bufcopy);
+							}
 						}
 
-						else perror("command wrong format (init arr:).\n");
+						else {
+							perror("command wrong format (init arr:).\n");
+							sem_wait(mutex_sem);
+							fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+							sem_post(mutex_sem);
+							printf("WRONG COMMAND => %s\n", bufcopy);
+						}
 					}
-					else printf("Command is in wrong format (DEP or ARRIVAL).\n");
+					else {
+						perror("Command is in wrong format (DEP or ARRIVAL).\n");
+						sem_wait(mutex_sem);
+						fprintf(logfile, "WRONG COMMAND => %s\n", bufcopy);
+						sem_post(mutex_sem);
+						printf("WRONG COMMAND => %s\n", bufcopy);
+					}
 			}
 		}
 
@@ -251,13 +352,16 @@ void read_config() {
 }
 
 void initializer() {
+	open_log();
 	read_config();
 	create_shm();
 	semaphore_creation();
 	create_mq();
 	create_named_pipe();
-
-	return;
+	sem_wait(mutex_sem);
+	fprintf(logfile, "PROGRAM STARTED.\n");
+	sem_post(mutex_sem);
+	printf("PROGRAM STARTED.\n");
 }
 
 void control_tower() {
@@ -268,11 +372,16 @@ void control_tower() {
 }
 
 void cleanup() {
+	sem_wait(mutex_sem);
+	fprintf(logfile, "PROGRAM FINISHED.\n");
+	sem_post(mutex_sem);
+	printf("PROGRAM FINISHED.\n");
 	shmdt(shm);
 	shmctl(shmid, IPC_RMID, NULL);
 	sem_unlink("WRITING");
 	sem_unlink("READING");
 	sem_unlink("MUTEX");
+	fclose(logfile);
 	
 	return;
 }
@@ -283,9 +392,10 @@ int main(int argc, char *argv[]) {
 
 	id = fork();
 
+
 	if(id == 0) {
 		control_tower();
-		printf("Control Tower created with PID %ld.\n", (long)getpid());
+		fprintf(logfile, "Control Tower created with PID %ld.\n", (long)getpid());
 		return 0;
 	}
 
@@ -293,12 +403,20 @@ int main(int argc, char *argv[]) {
 		perror("Error forking.\n");
 		return 1;
 	}
+	sem_wait(mutex_sem);
+	fprintf(logfile, "why doesn't this work.\n");
+	sem_post(mutex_sem);
+	read_pipe();
 
-	else {
-		read_pipe();
-		printf("Sim manager here.\n");
-		return 0;
+	if(pthread_join(thread, NULL)) {
+		perror("Joining thread.");
+		exit(1);
 	}
+	else {
+		fprintf(logfile, "Thread closing.\n");
+		printf("Thread closing.\n");
+	}
+	cleanup();
 
 	return 0;
 
