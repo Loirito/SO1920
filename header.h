@@ -25,7 +25,7 @@
 #define DEPARTURE_T 8
 #define MAX_ARRIVAL 5
 #define READING_SEM_VALUE 5
-//#define MAX_DEPARTURE 8
+#define MAX_DEPARTURE 8
 
 typedef struct arrivals {
 	bool can_arrive;
@@ -38,7 +38,7 @@ typedef struct arrivals {
 	int flight_id;
 	int priority;
 } arrival_flight;
-arrival_flight *arrivals_array;
+arrival_flight arrival_array[MAX_ARRIVAL];
 
 typedef struct departures {
 	bool can_depart;
@@ -47,7 +47,7 @@ typedef struct departures {
 	int flight_id;
 	int priority;
 } departure_flight;
-departure_flight *departures_array;
+departure_flight departure_array[MAX_DEPARTURE];
 
 typedef struct list_arrivals *arrival_list;
 typedef struct list_arrivals {
@@ -66,8 +66,6 @@ typedef struct list_departures {
 departures_list listdep;
 
 typedef struct shared_memory {
-	list_departures *departures_list;
-	list_arrivals *arrival_list;
 	int total_flights;
 	int total_landed_flights;
 	double avg_arrival_time;	// this value starts counting after the eta of the flight (so the standard should be the arrival motion T units of time)
@@ -78,7 +76,13 @@ typedef struct shared_memory {
 	int total_deviated_flights;
 	int total_rejections;
 } shmem;
-shmem *shm;
+shmem *stats;
+
+typedef struct tower {
+	arrival_flight arrivalsarray[MAX_ARRIVAL];
+	departure_flight departurearray[MAX_DEPARTURE];	
+} towershm;
+towershm *tower_shm;
 
 typedef struct ct_message {
 	int priority;
@@ -95,6 +99,20 @@ typedef struct flight_message {
 	int fuel;
 	int flight_id;
 }flight_message;
+
+typedef struct config {
+	int tunit;
+	int depduration;
+	int depinterval;
+	int arrduration;
+	int arrinterval;
+	int minholding;
+	int maxholding;
+	int maxdepartures;
+	int maxarrivals;
+}config;
+
+config config_st;
 
 void create_shm();
 void create_mq();
