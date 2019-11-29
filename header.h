@@ -26,6 +26,7 @@
 #define MAX_ARRIVAL 5
 #define READING_SEM_VALUE 5
 #define MAX_DEPARTURE 8
+#define MAX_FLIGHTS_IN_SYSTEM 100
 
 typedef struct arrivals {
 	bool can_arrive;
@@ -44,7 +45,7 @@ typedef struct departures {
 	bool can_depart;
 	int init;
 	int departure_time;
-	int flight_id;
+	char *flight_id;
 	int priority;
 } departure_flight;
 departure_flight departure_array[MAX_DEPARTURE];
@@ -52,7 +53,6 @@ departure_flight departure_array[MAX_DEPARTURE];
 typedef struct list_arrivals *arrival_list;
 typedef struct list_arrivals {
 	arrival_flight flight;
-	int n_slot;
 	arrival_list next;
 } list_arrivals;
 arrival_list listarr;
@@ -60,7 +60,6 @@ arrival_list listarr;
 typedef struct list_departures *departures_list;
 typedef struct list_departures {
 	departure_flight flight;
-	int n_slot;
 	departures_list next;
 } list_departures;
 departures_list listdep;
@@ -111,7 +110,6 @@ typedef struct config {
 	int maxdepartures;
 	int maxarrivals;
 }config;
-
 config config_st;
 
 void create_shm();

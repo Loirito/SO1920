@@ -4,3 +4,5 @@ PROGRAM STARTED.
 NEW COMMAND => DEPARTURE TP01 init: 10 takeoff: 200
 
 Departure flight created.
+PROGRAM STARTED.
+Control Tower created with PID 17351.

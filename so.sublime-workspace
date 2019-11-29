@@ -1,0 +1,561 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"read",
+				"readset"
+			],
+			[
+				"SIGINT",
+				"sigint"
+			],
+			[
+				"main",
+				"main_pid"
+			],
+			[
+				"tower",
+				"towershm"
+			],
+			[
+				"MA",
+				"MAX_ARRIVAL"
+			],
+			[
+				"shm",
+				"shmat"
+			],
+			[
+				"IPC",
+				"IPC_CREAT"
+			],
+			[
+				"MAX",
+				"MAX_DEPARTURE"
+			],
+			[
+				"depa",
+				"departure_flight"
+			],
+			[
+				"command",
+				"command_wrong_format"
+			],
+			[
+				"comnm",
+				"command_wrong_format"
+			],
+			[
+				"com",
+				"command_wrong_format"
+			],
+			[
+				"comman",
+				"command_wrong_format"
+			],
+			[
+				"comm",
+				"command_wrong_format"
+			],
+			[
+				"buf",
+				"bufcopy"
+			],
+			[
+				"mtex",
+				"mutex_sem"
+			],
+			[
+				"mue",
+				"mutex_sem"
+			],
+			[
+				"mutex",
+				"mutex_sem"
+			],
+			[
+				"log",
+				"logfile"
+			],
+			[
+				"arri",
+				"arrival_flight_worker"
+			],
+			[
+				"pthread",
+				"pthread_create"
+			],
+			[
+				"pthrea",
+				"pthread_t"
+			],
+			[
+				"open",
+				"open_log"
+			],
+			[
+				"max",
+				"maxarrivals"
+			],
+			[
+				"arr",
+				"arrinterval"
+			],
+			[
+				"de",
+				"depinterval"
+			],
+			[
+				"dep",
+				"depduration"
+			],
+			[
+				"id",
+				"idflight"
+			],
+			[
+				"fd",
+				"fd_named_pipe"
+			],
+			[
+				"Read",
+				"read_set"
+			],
+			[
+				"create",
+				"create_mq"
+			],
+			[
+				"ct",
+				"ct_message"
+			],
+			[
+				"flight",
+				"flight_message"
+			],
+			[
+				"semap",
+				"semaphore_creation"
+			],
+			[
+				"sem",
+				"sem_open"
+			],
+			[
+				"sem_",
+				"sem_unlink"
+			],
+			[
+				"control",
+				"control_tower"
+			],
+			[
+				"arriv",
+				"arrival_list"
+			],
+			[
+				"depart",
+				"departures_list"
+			],
+			[
+				"max_",
+				"MAX_DEPARTURE"
+			],
+			[
+				"Max",
+				"MAX_ARRIVAL"
+			],
+			[
+				"pthread_mute",
+				"pthread_mutex_lock"
+			],
+			[
+				"gener",
+				"generate_requests"
+			],
+			[
+				"pthre",
+				"pthread"
+			],
+			[
+				"N_",
+				"N_CLIENTS"
+			],
+			[
+				"thread",
+				"threads_limit"
+			],
+			[
+				"reader",
+				"readers"
+			],
+			[
+				"get",
+				"get_stock"
+			],
+			[
+				"ST",
+				"STOP_WRITERS"
+			],
+			[
+				"mem",
+				"mem_structure"
+			],
+			[
+				"stock",
+				"stocklist"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"shared",
+				"shared_var"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "projeto.c",
+			"settings":
+			{
+				"buffer_size": 9241,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "header.h",
+			"settings":
+			{
+				"buffer_size": 2790,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo02.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo03.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo01.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-05_students/demos/condvar_example.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-04_students/demos/demo05-mutex_between_procs_yes.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-04_students/demos/demo02-prod_cons_threads.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-07_students/demos/demo01-pipes_select_signal.c",
+		"/home/joaof/Documents/1920/4SO/Teste/testepratico1617.cpp",
+		"/home/joaof/Documents/1920/4SO/SO-TP-03-students_1/SO-TP-03-students/demos/sem_test-sysv.c",
+		"/home/joaof/Documents/1920/4SO/Projeto/SO1920/projeto.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-08-students/SO-TP-08-Message_Queues_MMF_v2019.pdf",
+		"/home/joaof/Documents/1920/4SO/Projeto/SO1920/header.h",
+		"/home/joaof/Documents/Personal/kbnt_tutorial/app.js",
+		"/home/joaof/Documents/Personal/app.js",
+		"/home/joaof/Documents/Personal/Dockerfile",
+		"/home/joaof/Documents/1920/4SO/SO-TP-04_students/demos/demo03-prod_cons_threads-named_semaphores.c",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/SO_Amores/SO_2018/main.c",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/SO_Amores/SO_2018/header.h",
+		"/home/joaof/Documents/1920/4SO/SO-TP-07_students/demos/printerd.c",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/SO_Amores/SO_2018-master/main.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-04_students/demos/demo04-mutex_between_procs_no.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-04_students/demos/demo01-simple_thread.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-07_students/demos/demo01-pipes.c",
+		"/home/joaof/Documents/1920/4SO/SO-TP-08-students/demos_MQ/pingpong.c",
+		"/home/joaof/Documents/1920/4SO/Projeto/projeto.c",
+		"/home/joaof/Documents/1920/4SO/Assignment03_students/reverse_print.c",
+		"/home/joaof/Documents/1920/4SO/Assignment03_students/multipleforks.c",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Madalena/Teoria da Informação/Trabalhos/PL1/PL1_TI/informacaoMutua.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Guardado/DanielaRicardoRogerio/Entropia.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Madalena/Teoria da Informação/Trabalhos/PL1/PL1_TI/pl1_ex6c.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Guardado/DanielaRicardoRogerio/ex6.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Madalena/Teoria da Informação/Trabalhos/PL1/PL1_TI/infoMutuaSom.m",
+		"/home/joaof/.cache/.fr-qZ9vtc/ex5.m",
+		"/home/joaof/Documents/1920/6TI/minf/mi.m",
+		"/home/joaof/.cache/.fr-kRKBsl/ex6.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Guardado/DanielaRicardoRogerio/ex5.m",
+		"/home/joaof/.cache/.fr-pX2KqN/ex5.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Guardado/DanielaRicardoRogerio/histograma.m",
+		"/home/joaof/.cache/.fr-zB8ayX/ex5.m",
+		"/home/joaof/Documents/1920/7Cenas de outra malta/TI_Guardado/DanielaRicardoRogerio/main.m",
+		"/home/joaof/Documents/1920/4SO/Assignment05_students/02_Stockmarket/prog.c",
+		"/home/joaof/Documents/1920/SO/Assignment04_students/01_shared_variable/sharedvariable_posix.c",
+		"/home/joaof/Documents/1920/SO/SO-TP-03-students_1/SO-TP-03-students/demos/sem_test-sysv.c",
+		"/home/joaof/Documents/1920/SO/Assignment04_students/02_stockmarket/stockmarket.c",
+		"/home/joaof/Documents/1920/SO/SO-TP-03-students_1/SO-TP-03-students/demos/sem_test-posix_unnamed.c",
+		"/home/joaof/Documents/1920/SO/TP02-students/demos/demo03.c",
+		"/home/joaof/Documents/1920/SO/TP02-students/demos/demo02.c",
+		"/home/joaof/Documents/1920/SO/TP02-students/demos/demo04.c",
+		"/home/joaof/Documents/1920/SO/SO-TP-03-students_1/SO-TP-03-students/demos/sem_test-posix_named.c",
+		"/home/joaof/Documents/1920/SO/Assignment03_students/reverse_print.c",
+		"/home/joaof/Documents/1920/SO/Assignment03_students/multipleforks.c",
+		"/home/joaof/Documents/1920/SO/Assignment03_students/01_father_and_son/father_son.c",
+		"/home/joaof/Documents/1920/SO/Assignment03_students/assignment03_v2019.pdf",
+		"/home/joaof/Documents/1920/SO/Assignment02_students/assignment02_v2019.pdf",
+		"/home/joaof/bin/git-repos/testing/README.md",
+		"/home/joaof/bin/preferred_screen.py"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"time",
+			"inside mutex",
+			"PROGRAM FINISHED",
+			"mutex",
+			"inside",
+			"Inside",
+			"inside",
+			"inside mutex",
+			"read_con",
+			"read_conf",
+			"read",
+			"tunit",
+			"read_config",
+			"config",
+			"fprintf",
+			"stats",
+			"towerstats",
+			"shmi",
+			"shmid",
+			"shm",
+			"shmid",
+			"shm",
+			"create_shm",
+			"shm",
+			"stats",
+			"shm",
+			"create_named",
+			"retva",
+			"};\n",
+			"central",
+			"read_pipe",
+			"pipe",
+			"log_file",
+			"+\");\n",
+			"log_file",
+			"logfile",
+			"log_file",
+			"logfile",
+			"log_file",
+			"open_log_file",
+			"open_log",
+			"log_file",
+			");\n",
+			"logfile",
+			"log_file",
+			"sem_wait",
+			"logfile",
+			"log",
+			"config",
+			"();\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "projeto.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9241,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "header.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2790,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "so.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Documents/1920/4SO/SO-TP-05_students/demos/condvar_example.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

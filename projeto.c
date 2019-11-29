@@ -9,15 +9,11 @@ int statsid;
 int towershmid;
 int fd_named_pipe;
 int mq_id;
-int tunit;
-int depduration, depinterval;
-int arrduration, arrinterval;
-int minholding, maxholding;
-int maxdepartures;
-int maxarrivals; 
 
-pthread_t thread;
+pthread_t flight_initializer;
+pthread_t flight_threads[MAX_FLIGHTS_IN_SYSTEM];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; 
+pthread_cond_t condvar = PTHREAD_COND_INITIALIZER;
 
 sem_t *writing_sem;
 sem_t *reading_sem;
@@ -118,6 +114,46 @@ void open_log() {
 	return;
 }
 
+void create_departure_list(arrival_list* head) {
+	head = NULL;
+	return;
+}
+
+void add_departure_list(departures_list head, departure_flight flight) {
+	departures_list tmp = (departures_list) malloc(sizeof(list_departures));
+	departures_list tmp2 = (departures_list) malloc(sizeof(list_departures));
+	if(tmp == NULL) {
+		perror("Inserting into list. (ran out of memory)");
+		exit(-1);
+	}
+
+	tmp->flight = flight;
+	tmp->next = NULL;
+
+	tmp2 = head;
+
+	if(head == NULL) {
+		head = tmp;
+	}
+	else {
+		for(;;) {
+			if(tmp->flight.init > tmp2->flight.init &&  tmp2->next == NULL) {
+				tmp2->next = tmp;
+				return;
+			}
+			else if(tmp->flight.init >= tmp2->flight.init && tmp2->next->flight.init > tmp->flight.init) {
+				tmp->next = tmp2->next;
+				tmp2->next = tmp;
+				return;
+			}
+			else if(tmp2->next->flight.init < tmp->flight.init) {
+				tmp2 = tmp2->next;
+			}
+		}
+	}
+	return;
+}
+
 void* arrival_flight_worker(void *arg) {
 	sem_wait(mutex_sem);
 	pthread_mutex_lock(&mutex);
@@ -141,30 +177,31 @@ void* departure_flight_worker(void *arg) {
 } 
 
 void create_arrival(char *idflight, int ut, int eta, int fuel) {
-	time_t begintime;
-	begintime = time(NULL);
-	double init = unit_conversion(ut);
-	while((begintime + init) < time(NULL)) {	}
-	pthread_create(&thread, NULL, arrival_flight_worker, NULL);
+	//time_t begintime;
+	//begintime = time(NULL);
+	//double init = unit_conversion(ut);
+	//while((begintime + init) < time(NULL)) {	}
+	//pthread_create(&thread, NULL, arrival_flight_worker, NULL);
 	return;
 }
 
 void create_departure(char *idflight, int ut, int takeoff) {
-	time_t begintime;
-	begintime = time(NULL);
-	double init = unit_conversion(ut);
-	while((begintime + init) > time(NULL)) {	}	
-	pthread_create(&thread, NULL, departure_flight_worker, NULL);
+	departure_flight flight;
+	flight.flight_id = "";
+	strcpy(flight.flight_id, idflight);
+	flight.init = ut;
+	flight.departure_time = takeoff;
 	return;
 }
 
 double unit_conversion(int ut) {
 	double conv;
-	double newunit = (double)tunit/1000;
+	double newunit = (double)config_st.tunit/1000;
 	conv = (double) ut * newunit;
+
 	return conv;
 }
-
+	
 void command_wrong_format(char *buffer) {
 	perror("command in wrong format.\n");
 	sem_wait(mutex_sem);
@@ -333,7 +370,7 @@ void initializer() {
 }
 
 void control_tower() {
-
+	
 	printf("Inside control tower.\n");
 
 	return;
@@ -377,15 +414,15 @@ int main(int argc, char *argv[]) {
 
 	read_pipe();
 
-	if(pthread_join(thread, NULL)) {
-		perror("Joining thread.");
-		exit(1);
-	}
-	else {
-		
-		fprintf(logfile, "Thread closing.\n");
-
-		printf("Thread closing.\n");
+	for(int i=0; i<MAX_FLIGHTS_IN_SYSTEM; i++) {
+		if(pthread_join(flight_threads[i], NULL)) {
+			perror("Joining thread.");
+			exit(1);
+		}
+		else {
+			fprintf(logfile, "Thread closing.\n");
+			printf("Thread closing.\n");
+		}
 	}
 	cleanup();
 
