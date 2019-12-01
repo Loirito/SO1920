@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"depar",
+				"departure_flight"
+			],
+			[
+				"dep",
+				"dep_list"
+			],
+			[
+				"print",
+				"print_departure_list"
+			],
+			[
+				"add",
+				"add_departure_list"
+			],
+			[
+				"depart",
+				"departure_time"
+			],
+			[
+				"creat",
+				"create_departure_list"
+			],
+			[
+				"departure",
+				"departures_list"
+			],
+			[
+				"departue",
+				"departures_list"
+			],
+			[
+				"flight",
+				"flight_id"
+			],
+			[
+				"tmp",
+				"tmp2"
+			],
+			[
+				"list",
+				"list_departures"
+			],
+			[
+				"PTHRE",
+				"pthread_t"
+			],
+			[
+				"time",
+				"time_t"
+			],
+			[
 				"read",
 				"readset"
 			],
@@ -108,10 +160,6 @@
 				"depinterval"
 			],
 			[
-				"dep",
-				"depduration"
-			],
-			[
 				"id",
 				"idflight"
 			],
@@ -132,10 +180,6 @@
 				"ct_message"
 			],
 			[
-				"flight",
-				"flight_message"
-			],
-			[
 				"semap",
 				"semaphore_creation"
 			],
@@ -154,10 +198,6 @@
 			[
 				"arriv",
 				"arrival_list"
-			],
-			[
-				"depart",
-				"departures_list"
 			],
 			[
 				"max_",
@@ -223,7 +263,8 @@
 			"file": "projeto.c",
 			"settings":
 			{
-				"buffer_size": 9241,
+				"buffer_size": 10895,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -231,7 +272,8 @@
 			"file": "header.h",
 			"settings":
 			{
-				"buffer_size": 2790,
+				"buffer_size": 2801,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -252,7 +294,7 @@
 	},
 	"console":
 	{
-		"height": 0.0,
+		"height": 137.0,
 		"history":
 		[
 		]
@@ -268,6 +310,7 @@
 	},
 	"file_history":
 	[
+		"/home/joaof/Documents/1920/4SO/Projeto/SO1920/Makefile",
 		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo02.c",
 		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo03.c",
 		"/home/joaof/Documents/1920/4SO/SO-TP-06_students/demos/demo01.c",
@@ -327,7 +370,7 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -341,6 +384,22 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"initi",
+			"sigint",
+			"list_dep",
+			"deplist",
+			"cleanup",
+			"dep_list",
+			"depflig",
+			"dep_flight",
+			"print_depar",
+			"add",
+			"++)",
+			"); ",
+			"thread",
+			"departure_flight_worker",
+			"departure_flight",
+			"tunit",
 			"time",
 			"inside mutex",
 			"PROGRAM FINISHED",
@@ -408,7 +467,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -417,15 +476,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9241,
+						"buffer_size": 10895,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3725,
+								3725
 							]
 						],
 						"settings":
@@ -434,10 +493,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1812.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -446,15 +505,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2790,
+						"buffer_size": 2801,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2790,
+								2790
 							]
 						],
 						"settings":
@@ -463,10 +522,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1352.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -474,7 +533,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 24.0
+		"height": 37.0
 	},
 	"input":
 	{
@@ -511,7 +570,7 @@
 	"project": "so.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 70.0
 	},
 	"save_all_on_build": true,
 	"select_file":

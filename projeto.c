@@ -9,6 +9,10 @@ int statsid;
 int towershmid;
 int fd_named_pipe;
 int mq_id;
+departures_list dep_list;
+arrival_list arr_list;
+struct sigaction *sigint;
+int debugger = 0;
 
 pthread_t flight_initializer;
 pthread_t flight_threads[MAX_FLIGHTS_IN_SYSTEM];
@@ -114,16 +118,21 @@ void open_log() {
 	return;
 }
 
-void create_departure_list(arrival_list* head) {
+void create_departure_list(departures_list *head) {
 	head = NULL;
 	return;
 }
 
-void add_departure_list(departures_list head, departure_flight flight) {
+void create_arrival_list(arrival_list *head) {
+	head = NULL;
+	return;
+}
+
+departures_list add_departure_list(departures_list head, departure_flight flight) {
 	departures_list tmp = (departures_list) malloc(sizeof(list_departures));
-	departures_list tmp2 = (departures_list) malloc(sizeof(list_departures));
+	departures_list tmp2;
 	if(tmp == NULL) {
-		perror("Inserting into list. (ran out of memory)");
+		perror("Inserting into departure list. (ran out of memory)");
 		exit(-1);
 	}
 
@@ -134,26 +143,86 @@ void add_departure_list(departures_list head, departure_flight flight) {
 
 	if(head == NULL) {
 		head = tmp;
+		printf("head == NULL\n");
+		return head;
 	}
 	else {
-		for(;;) {
-			if(tmp->flight.init > tmp2->flight.init &&  tmp2->next == NULL) {
+		while(1) {
+			if(tmp->flight.init >= tmp2->flight.init &&  tmp2->next == NULL) {
 				tmp2->next = tmp;
-				return;
+				return head;
 			}
 			else if(tmp->flight.init >= tmp2->flight.init && tmp2->next->flight.init > tmp->flight.init) {
 				tmp->next = tmp2->next;
 				tmp2->next = tmp;
-				return;
+				return head;
 			}
-			else if(tmp2->next->flight.init < tmp->flight.init) {
+			else if(tmp2->next->flight.init <= tmp->flight.init) {
 				tmp2 = tmp2->next;
 			}
 		}
 	}
+}
+
+arrival_list add_arrival_list(arrival_list head, arrival_flight flight) {
+	arrival_list tmp = (arrival_list) malloc(sizeof(list_arrivals));
+	arrival_list tmp2;
+
+	if(tmp == NULL) {
+		perror("Inserting into arrival list. (ran out of memory)");
+		exit(-1);
+	}
+
+	tmp->flight = flight;
+	tmp->next = NULL;
+	tmp2 = head;
+
+	if(head == NULL) {
+		head = tmp;
+		return head;
+	}
+
+	else {
+		while(1) {
+			if(tmp->flight.init >= tmp2->flight.init && tmp2->next == NULL) {
+				tmp2->next = tmp;
+				return head;
+			}
+
+			else if(tmp->flight.init >= tmp2->flight.init && tmp->flight.init < tmp2->next->flight.init) {
+				tmp->next = tmp2->next;
+				tmp2->next = tmp;
+				return head;
+			}
+
+			else if(tmp2->next->flight.init <= tmp->flight.init) {
+				tmp2 = tmp2->next;
+			}
+		}
+	}
+}
+
+void print_departure_list(departures_list head) {
+	departures_list tmp;
+	tmp = head;
+	while(tmp != NULL) {
+		printf("[DEPARTURE] FLIGHT ID: %s\tINIT: %d\n", tmp->flight.flight_id, tmp->flight.init);
+		tmp = tmp->next;
+	}
+	free(tmp);
 	return;
 }
 
+void print_arrival_list(arrival_list head) {
+	arrival_list tmp;
+	tmp = head;
+	while(tmp != NULL) {
+		printf("[ARRIVAL] FLIGHT ID %s\tINIT: %d\n", tmp->flight.flight_id, tmp->flight.init);
+		tmp = tmp->next;
+	}
+	free(tmp);
+	return;
+}
 void* arrival_flight_worker(void *arg) {
 	sem_wait(mutex_sem);
 	pthread_mutex_lock(&mutex);
@@ -174,7 +243,19 @@ void* departure_flight_worker(void *arg) {
 	sem_post(mutex_sem);
 	printf("Departure flight created.\n");
 	return NULL;
-} 
+}
+
+// void* flight_creation_worker(void *head) {
+// 	time_t begintime;
+// 	begintime = time(NULL);
+// 	arrival_list tmp = *((arrival_list) head);
+// 	while(1) {
+// 		for(tmp = head; tmp == NULL; tmp=tmp->next) {
+// 			if(tmp->flight.init == )
+// 		}
+// 	}
+
+// }
 
 void create_arrival(char *idflight, int ut, int eta, int fuel) {
 	//time_t begintime;
@@ -185,20 +266,10 @@ void create_arrival(char *idflight, int ut, int eta, int fuel) {
 	return;
 }
 
-void create_departure(char *idflight, int ut, int takeoff) {
-	departure_flight flight;
-	flight.flight_id = "";
-	strcpy(flight.flight_id, idflight);
-	flight.init = ut;
-	flight.departure_time = takeoff;
-	return;
-}
-
 double unit_conversion(int ut) {
 	double conv;
 	double newunit = (double)config_st.tunit/1000;
 	conv = (double) ut * newunit;
-
 	return conv;
 }
 	
@@ -220,8 +291,7 @@ void read_pipe() {
 	char bufcopy[256];
 	int buflen = 0;
 	char *token;
-	char idflight[8];
-	int ut = 0, takeoff = 0, eta = 0, fuel = 0;
+	//int  eta = 0, fuel = 0;
 
 	while(1) {
 
@@ -244,25 +314,27 @@ void read_pipe() {
 		strcpy(bufcopy, buffer);
 		token = strtok(buffer, " ");
 		if(token != NULL && strcmp(token, "DEPARTURE") == 0) {
+			departure_flight depflight;
 			token = strtok(NULL, " ");
-			strcpy(idflight, token);
-			printf("idflight is %s.\n", idflight);
+			strcpy(depflight.flight_id, token);
+			printf("idflight is %s.\n", depflight.flight_id);
 			token = strtok(NULL, " ");
 			if(strcmp(token, "init:") == 0) {
 				token = strtok(NULL, " ");
-				ut = atoi(token);
-				printf("tempo de entrada no sistema: %d.\n", ut);
+				depflight.init = atoi(token);
+				printf("tempo de entrada no sistema: %d.\n", depflight.init);
 				token = strtok(NULL, " ");
 				if(strcmp(token, "takeoff:") == 0) {
 					token = strtok(NULL, " ");
-					takeoff = atoi(token);
-					printf("takeoff time: %d.\n", takeoff);
+					depflight.departure_time = atoi(token);
+					printf("takeoff time: %d.\n", depflight.departure_time);
 					sem_wait(mutex_sem);
 					fprintf(logfile, "NEW COMMAND => %s\n", bufcopy);
 					fflush(logfile);
 					sem_post(mutex_sem);
 					printf("NEW COMMAND => %s\n", bufcopy);
-					create_departure(idflight, ut, takeoff);
+					dep_list = add_departure_list(dep_list, depflight);
+					print_departure_list(dep_list);
 				}
 				else command_wrong_format(bufcopy);
 			}
@@ -270,36 +342,38 @@ void read_pipe() {
 		}
 
 		else if(token != NULL && strcmp(token, "ARRIVAL") == 0) {
+			arrival_flight flight;
 			token = strtok(NULL, " ");
-			strcpy(idflight, token);
-			printf("idflight is %s.\n", idflight);
+			strcpy(flight.flight_id, token);
+			printf("idflight is %s.\n", flight.flight_id);
 			token = strtok(NULL, " ");
 			if(strcmp(token, "init:") == 0) {
 				token = strtok(NULL, " ");
-				ut = atoi(token);
-				printf("tempo de entrada no sistema: %d.\n", ut);
+				flight.init = atoi(token);
+				printf("tempo de entrada no sistema: %d.\n", flight.init);
 				token = strtok(NULL, " ");
 				if(strcmp(token, "eta:") == 0) {
 					token = strtok(NULL, " ");
-					eta = atoi(token);
-					printf("eta: %d.\n", eta);
+					flight.eta = atoi(token);
+					printf("eta: %d.\n", flight.eta);
 					token = strtok(NULL, " ");
 					if(strcmp(token, "fuel:") == 0) {
 						token = strtok(NULL, " ");
-						fuel = atoi(token);
-						printf("fuel: %d.\n", fuel);
+						flight.fuel = atoi(token);
+						printf("fuel: %d.\n", flight.fuel);
 						sem_wait(mutex_sem);
-						fprintf(logfile, "NEW COMMAND => %s\n", bufcopy);
-						fflush(logfile);
-						sem_post(mutex_sem);
-						printf("NEW COMMAND => %s\n", bufcopy);
-						create_arrival(idflight, ut, eta, fuel);
-					}
-					else command_wrong_format(bufcopy);
-				}
-				else command_wrong_format(bufcopy);
-			}
-			else command_wrong_format(bufcopy);
+		 				fprintf(logfile, "NEW COMMAND => %s\n", bufcopy);
+		 				fflush(logfile);
+		 				sem_post(mutex_sem);
+		 				printf("NEW COMMAND => %s\n", bufcopy);
+		 				arr_list = add_arrival_list(arr_list, flight);
+		 				print_arrival_list(arr_list);
+		 			}
+		 			else command_wrong_format(bufcopy);
+		 		}
+		 		else command_wrong_format(bufcopy);
+		 	}
+		 	else command_wrong_format(bufcopy);
 		}
 		else command_wrong_format(bufcopy);
 	}
@@ -357,6 +431,10 @@ void read_config() {
 }
 
 void initializer() {
+	sigint = (struct sigaction*)malloc(sizeof(struct sigaction));
+	sigint->sa_handler = cleanup;
+	create_departure_list(&dep_list);
+	create_arrival_list(&arr_list);
 	open_log();
 	read_config();
 	create_shm();
@@ -377,11 +455,12 @@ void control_tower() {
 }
 
 void cleanup() {
+	free(dep_list);
 	sem_wait(mutex_sem);
 	fprintf(logfile, "PROGRAM FINISHED.\n");
 	fflush(logfile);
 	sem_post(mutex_sem);
-	printf("PROGRAM FINISHED.\n");
+	printf("\nPROGRAM FINISHED.\n");
 	shmdt(stats);
 	shmctl(statsid, IPC_RMID, NULL);
 	shmdt(tower_shm);
@@ -391,15 +470,15 @@ void cleanup() {
 	sem_unlink("MUTEX");
 	fclose(logfile);
 	
-	return;
+	exit(0);
 }
 
 int main(int argc, char *argv[]) {
 
-
 	initializer();
 
 	id = fork();
+
 
 	if(id == 0) {
 		control_tower();
@@ -411,6 +490,16 @@ int main(int argc, char *argv[]) {
 		perror("Error forking.\n");
 		return 1;
 	}
+
+	if(sigaction(SIGINT, sigint, NULL) < 0) {
+		perror("Calling sigaction.");
+		exit(-1);
+	}
+
+	/*if(pthread_create(&flight_initializer, NULL, flight_creation_worker, NULL) == EAGAIN || EINVAL || EPERM) {
+		perror("creating flight initializer thread.");
+		exit(-1);
+	}*/
 
 	read_pipe();
 
@@ -424,7 +513,6 @@ int main(int argc, char *argv[]) {
 			printf("Thread closing.\n");
 		}
 	}
-	cleanup();
 
 	return 0;
 

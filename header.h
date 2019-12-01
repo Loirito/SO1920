@@ -36,7 +36,7 @@ typedef struct arrivals {
 	int eta;
 	int init;
 	int fuel;
-	int flight_id;
+	char flight_id[8];
 	int priority;
 } arrival_flight;
 arrival_flight arrival_array[MAX_ARRIVAL];
@@ -45,7 +45,7 @@ typedef struct departures {
 	bool can_depart;
 	int init;
 	int departure_time;
-	char *flight_id;
+	char flight_id[8];
 	int priority;
 } departure_flight;
 departure_flight departure_array[MAX_DEPARTURE];
@@ -55,14 +55,12 @@ typedef struct list_arrivals {
 	arrival_flight flight;
 	arrival_list next;
 } list_arrivals;
-arrival_list listarr;
 
 typedef struct list_departures *departures_list;
 typedef struct list_departures {
 	departure_flight flight;
 	departures_list next;
 } list_departures;
-departures_list listdep;
 
 typedef struct shared_memory {
 	int total_flights;
