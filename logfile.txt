@@ -308,3 +308,419 @@ NEW COMMAND => ARRIVAL TP10 init: 500 eta: 200 fuel: 1200
 NEW COMMAND => ARRIVAL TP11 init: 600 eta: 200 fuel: 1200
 
 PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 4806.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP01 init: 10 takeoff: 100
+
+NEW COMMAND => DEPARTURE TP02 init: 40 takeoff: 100
+
+NEW COMMAND => DEPARTURE TP03 init: 30 takeoff: 100
+
+NEW COMMAND => ARRIVAL TP04 init: 40 eta: 100 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP05 init: 60 eta: 100 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP06 init: 50 eta: 100 fuel: 1200
+
+NEW COMMAND => DEPARTURE TP03 init: 30 takeoff: 100
+
+NEW COMMAND => ARRIVAL TP06 init: 50 eta: 100 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP07 init: 50 eta: 100 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 8720.
+PROGRAM STARTED.
+Control Tower created with PID 8829.
+PROGRAM STARTED.
+Control Tower created with PID 9034.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9750.
+PROGRAM STARTED.
+Control Tower created with PID 12687.
+PROGRAM STARTED.
+Control Tower created with PID 12822.
+PROGRAM STARTED.
+Control Tower created with PID 13039.
+PROGRAM STARTED.
+Control Tower created with PID 13157.
+PROGRAM STARTED.
+Control Tower created with PID 13224.
+PROGRAM STARTED.
+Control Tower created with PID 13414.
+PROGRAM STARTED.
+Control Tower created with PID 13500.
+PROGRAM STARTED.
+Control Tower created with PID 15649.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 26487.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 30 eta: 300 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 300 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 27169.
+PROGRAM STARTED.
+Control Tower created with PID 27278.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 27479.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 28073.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 1450.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 2259.
+PROGRAM STARTED.
+Control Tower created with PID 2281.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 2606.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 2669.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 2786.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 2837.
+PROGRAM STARTED.
+Control Tower created with PID 2908.
+PROGRAM STARTED.
+Control Tower created with PID 3162.
+PROGRAM STARTED.
+Control Tower created with PID 3192.
+PROGRAM STARTED.
+Control Tower created with PID 3256.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 3680.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 4394.
+PROGRAM STARTED.
+Arrival flight []created at instant 0!.
+PROGRAM STARTED.
+Control Tower created with PID 4548.
+PROGRAM STARTED.
+Arrival flight []created at instant 0!.
+PROGRAM STARTED.
+Control Tower created with PID 4614.
+PROGRAM STARTED.
+Arrival flight []created at instant 0!.
+PROGRAM STARTED.
+Control Tower created with PID 4686.
+PROGRAM STARTED.
+Control Tower created with PID 4753.
+PROGRAM STARTED.
+Control Tower created with PID 6116.
+PROGRAM STARTED.
+Control Tower created with PID 6142.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 6332.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 5277.
+PROGRAM STARTED.
+Control Tower created with PID 5316.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 5582.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 5953.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 6115.
+PROGRAM STARTED.
+Arrival flight []created at instant 0!.
+PROGRAM STARTED.
+Arrival flight []created at instant 0!.
+PROGRAM STARTED.
+Control Tower created with PID 6789.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 8746.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9071.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9211.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9389.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9468.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9517.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 9647.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 10079.
+PROGRAM STARTED.
+Control Tower created with PID 10262.
+PROGRAM STARTED.
+Control Tower created with PID 10435.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 12759.
+PROGRAM STARTED.
+PROGRAM STARTED.
+Control Tower created with PID 14578.
+PROGRAM STARTED.
+Control Tower created with PID 19223.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 22557.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 23656.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM STARTED.
+Control Tower created with PID 24112.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM STARTED.
+Control Tower created with PID 24487.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM STARTED.
+Control Tower created with PID 24601.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 20!.
+PROGRAM STARTED.
+Control Tower created with PID 26239.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 26276.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 26360.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 26404.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 28763.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 3798.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 3922.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP01]created at instant 10!.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 4316.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+Arrival flight [TP02]created at instant 20!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 17901.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 20!.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 18219.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 18285.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+PROGRAM STARTED.
+Control Tower created with PID 23912.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP02]created at instant 20!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 24439.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+Arrival flight [TP02]created at instant 20!.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 25294.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 26436.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 26657.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+WRONG COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP01]created at instant 10!.
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 10!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+Control Tower created with PID 31569.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+Arrival flight [TP02]created at instant 10!.
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP02 init: 10 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
