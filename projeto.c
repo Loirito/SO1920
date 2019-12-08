@@ -10,20 +10,25 @@ int towershmid;
 int fd_named_pipe;
 int mq_id;
 departures_list dep_list;
+departures_list static_dep_list;
 arrival_list arr_list;
+arrival_list static_arr_list;
 struct sigaction *sigint;
 int debugger = 0;
 time_t initialtime;
 
-pthread_t flight_initializer;
+pthread_t arrival_initializer;
+pthread_t departure_initializer;
 pthread_t pipe_thread;
 pthread_t flight_threads[MAX_FLIGHTS_IN_SYSTEM];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; 
-pthread_mutex_t initializermutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t condvar = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t arrivalmutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t departuremutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t arrivalcond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t departurecond = PTHREAD_COND_INITIALIZER;
 
-sem_t *writing_sem;
-sem_t *reading_sem;
+sem_t *stats_writing_sem;
+sem_t *stats_reading_sem;
 sem_t *mutex_sem;
 
 
@@ -78,14 +83,14 @@ void create_mq(void) {
 
 void semaphore_creation(void) {
 	sem_unlink("WRITING");
-	if((writing_sem = sem_open("WRITING", O_CREAT|O_EXCL, 0700, 0)) == SEM_FAILED) {
+	if((stats_writing_sem = sem_open("WRITING", O_CREAT|O_EXCL, 0700, 1)) == SEM_FAILED) {
 		perror("Creating writing semaphore.\n");
 		exit(1);
 	}
 	printf("Successfully created WRITING semaphore\n");
 	
 	sem_unlink("READING");
-	if((reading_sem = sem_open("READING", O_CREAT|O_EXCL, 0700, READING_SEM_VALUE)) == SEM_FAILED) {
+	if((stats_reading_sem = sem_open("READING", O_CREAT|O_EXCL, 0700, READING_SEM_VALUE)) == SEM_FAILED) {
 		perror("Creating reading semaphore.\n");
 		exit(1);
 	}
@@ -131,23 +136,25 @@ void create_arrival_list(arrival_list *head) {
 	return;
 }
 
-void delete_departure_list(departures_list *head) {
+void delete_departure_list(departures_list head) {
 	departures_list temp;
 	while(head != NULL){
 		temp = head;
 		head = head->next;
 		free(temp);
 	}
+	printf("DEPARTURE LIST IS DELETED.\n");
 	return;
 }
 
-void delete_arrival_list(arrival_list *head) {
+void delete_arrival_list(arrival_list head) {
 	arrival_list temp;
 	while(head != NULL) {
 		temp = head;
 		head = head->next;
 		free(temp);
 	}
+	printf("ARRIVAL LIST IS DELETED.\n");
 	return;
 }
 
@@ -161,18 +168,23 @@ departures_list add_departure_list(departures_list head, departure_flight flight
 
 	tmp->flight = flight;
 	tmp->next = NULL;
-
 	tmp2 = head;
 
 	if(head == NULL) {
 		head = tmp;
-		printf("head == NULL\n");
+		static_dep_list = tmp;
 		return head;
 	}
 	else {
 		while(1) {
 			if(tmp->flight.init >= tmp2->flight.init &&  tmp2->next == NULL) {
 				tmp2->next = tmp;
+				return head;
+			}
+
+			else if(tmp->flight.init < tmp2->flight.init) {
+				tmp->next = tmp2;
+				head = tmp;
 				return head;
 			}
 			else if(tmp->flight.init >= tmp2->flight.init && tmp2->next->flight.init > tmp->flight.init) {
@@ -202,9 +214,9 @@ arrival_list add_arrival_list(arrival_list head, arrival_flight flight) {
 
 	if(head == NULL) {
 		head = tmp;
+		static_arr_list = tmp;
 		return head;
 	}
-
 	else {
 		while(1) {
 			if(tmp->flight.init >= tmp2->flight.init && tmp2->next == NULL) {
@@ -252,6 +264,49 @@ void print_arrival_list(arrival_list head) {
 	free(tmp);
 	return;
 }
+
+int check_arrival_flight_id(arrival_flight arrflight, arrival_list arrhead, departures_list dephead) {
+	arrival_list tmp = arrhead;
+	departures_list tmp2 = dephead;
+	while(tmp != NULL) {
+		if(strcmp(arrflight.flight_id, tmp->flight.flight_id) == 0) {
+			printf("FLIGHT [%s] already exists in system.\n", arrflight.flight_id);
+			return -1;
+		}
+		tmp = tmp->next;
+	}
+
+	while(tmp2 != NULL) {
+		if(strcmp(arrflight.flight_id, tmp2->flight.flight_id) == 0) {
+			printf("FLIGHT [%s] already exists in system.\n", arrflight.flight_id);
+			return -1;
+		}
+		tmp2 = tmp2->next;
+	}
+	return 0;
+}
+
+int check_departure_flight_id(departure_flight flight, arrival_list arrhead, departures_list dephead) {
+	arrival_list tmp = arrhead;
+	departures_list tmp2 = dephead;
+	while(tmp != NULL) {
+		if(strcmp(flight.flight_id, tmp->flight.flight_id) == 0) {
+			printf("FLIGHT [%s] already exists in system.\n", flight.flight_id);
+			return -1;
+		}
+		tmp = tmp->next;
+	}
+
+	while(tmp2 != NULL) {
+		if(strcmp(flight.flight_id, tmp2->flight.flight_id) == 0) {
+			printf("FLIGHT [%s] already exists in system.\n", flight.flight_id);
+			return -1;
+		}
+		tmp2 = tmp2->next;
+	}
+	return 0;
+}
+
 void* arrival_flight_worker(void *flight) {
 	arrival_flight arrflight = *((arrival_flight*)flight);
 	sem_wait(mutex_sem);
@@ -278,33 +333,37 @@ void* departure_flight_worker(void *flight) {
 
 void* create_arrival_flight(void *arg) {
 	arrival_list temp;
-	int i = 0;
 	while(1){
 		while(arr_list != NULL) {	
 			temp = arr_list;
-			pthread_mutex_lock(&initializermutex);
+			pthread_mutex_lock(&arrivalmutex);
 			while(temp == NULL) {
-				pthread_cond_wait(&condvar, &initializermutex);
+				pthread_cond_wait(&arrivalcond, &arrivalmutex);
 			}
-			pthread_mutex_unlock(&initializermutex);
+			pthread_mutex_unlock(&arrivalmutex);
 			printf("INITIAL TIME: %ld.\n", initialtime);
 			printf("init e este oh mano: %d\n", temp->flight.init);
 			if(temp != NULL) {
 				printf("TIME NOW: %ld.\n", time(NULL) - initialtime);
 				if(unit_conversion(temp->flight.init) <= time(NULL) - initialtime) {
-					pthread_create(&flight_threads[i], NULL, arrival_flight_worker, &temp->flight);
-					printf("[THREAD INITIALIZER] Created thread number %d.\n", i);
-					i++;
+					sem_wait(stats_reading_sem);
+					sem_wait(stats_writing_sem);
+					pthread_create(&flight_threads[stats->total_flights], NULL, arrival_flight_worker, &temp->flight);
+					stats->total_flights++;
+					printf("[THREAD INITIALIZER] Created thread number %d.\n", stats->total_flights);
+					sem_post(stats_writing_sem);
+					sem_post(stats_reading_sem);
 					arr_list = arr_list->next;
-					free(temp);
 				}
 				sleep(1);
 			}
 
-			if(i == MAX_FLIGHTS_IN_SYSTEM) {
+			sem_wait(stats_reading_sem);
+			if(stats->total_flights == MAX_FLIGHTS_IN_SYSTEM) {
 				printf("REACHED MAX NUMBER OF FLIGHTS POSSIBLE.\n");
 				return 0;
 			}
+			sem_post(stats_reading_sem);
 		}
 	}
 	return 0;
@@ -312,33 +371,38 @@ void* create_arrival_flight(void *arg) {
 
 void* create_departure_flight(void *arg) {
 	departures_list temp;
-	int i = 0;
 	while(1){
-		while(arr_list != NULL) {	
-			temp = arr_list;
-			pthread_mutex_lock(&initializermutex);
+		while(dep_list != NULL) {	
+			temp = dep_list;
+			pthread_mutex_lock(&departuremutex);
 			while(temp == NULL) {
-				pthread_cond_wait(&condvar, &initializermutex);
+				pthread_cond_wait(&departurecond, &departuremutex);
 			}
-			pthread_mutex_unlock(&initializermutex);
+			pthread_mutex_unlock(&departuremutex);
 			printf("INITIAL TIME: %ld.\n", initialtime);
 			printf("init e este oh mano: %d\n", temp->flight.init);
 			if(temp != NULL) {
 				printf("TIME NOW: %ld.\n", time(NULL) - initialtime);
 				if(unit_conversion(temp->flight.init) <= time(NULL) - initialtime) {
-					pthread_create(&flight_threads[i], NULL, arrival_flight_worker, &temp->flight);
-					printf("[THREAD INITIALIZER] Created thread number %d.\n", i);
-					i++;
-					arr_list = arr_list->next;
-					free(temp);
+					sem_wait(stats_reading_sem);
+					sem_wait(stats_writing_sem);
+					printf("I'm inside\n");
+					pthread_create(&flight_threads[stats->total_flights], NULL, departure_flight_worker, &temp->flight);
+					stats->total_flights++;
+					printf("[THREAD INITIALIZER] Created thread number %d.\n", stats->total_flights);
+					sem_post(stats_writing_sem);
+					sem_post(stats_reading_sem);
+					dep_list = dep_list->next;
 				}
 				sleep(1);
 			}
 
-			if(i == MAX_FLIGHTS_IN_SYSTEM) {
+			sem_wait(stats_reading_sem);
+			if(stats->total_flights == MAX_FLIGHTS_IN_SYSTEM) {
 				printf("REACHED MAX NUMBER OF FLIGHTS POSSIBLE.\n");
 				return 0;
 			}
+			sem_post(stats_reading_sem);
 		}
 	}
 	return 0;
@@ -378,10 +442,19 @@ void pipe_control(int buflen, char *buffer, char *bufcopy, char *token) {
 			token = strtok(NULL, " ");
 			strcpy(depflight.flight_id, token);
 			printf("idflight is %s.\n", depflight.flight_id);
+			if(check_departure_flight_id(depflight, static_arr_list, static_dep_list) == -1) {
+				command_wrong_format(bufcopy);
+				pipe_control(buflen, buffer, bufcopy, token);
+			}
 			token = strtok(NULL, " ");
 			if(strcmp(token, "init:") == 0) {
 				token = strtok(NULL, " ");
 				depflight.init = atoi(token);
+				if(unit_conversion(depflight.init) < time(NULL) - initialtime) {
+					command_wrong_format(bufcopy);
+					printf("Entered flight init is lower than system time.\n");
+					pipe_control(buflen, buffer, bufcopy, token);
+				}
 				printf("tempo de entrada no sistema: %d.\n", depflight.init);
 				token = strtok(NULL, " ");
 				if(strcmp(token, "takeoff:") == 0) {
@@ -395,6 +468,11 @@ void pipe_control(int buflen, char *buffer, char *bufcopy, char *token) {
 					printf("NEW COMMAND => %s\n", bufcopy);
 					dep_list = add_departure_list(dep_list, depflight);
 					print_departure_list(dep_list);
+					pthread_mutex_lock(&departuremutex);
+					if(dep_list != NULL) {
+						pthread_cond_signal(&departurecond);
+					}
+					pthread_mutex_unlock(&departuremutex);
 				}
 				else command_wrong_format(bufcopy);
 			}
@@ -407,12 +485,17 @@ void pipe_control(int buflen, char *buffer, char *bufcopy, char *token) {
 			token = strtok(NULL, " ");
 			strcpy(flight.flight_id, token);
 			printf("idflight is %s.\n", flight.flight_id);
+			if(check_arrival_flight_id(flight, static_arr_list, static_dep_list) == -1) {
+				command_wrong_format(bufcopy);
+				pipe_control(buflen, buffer, bufcopy, token);
+			}
 			token = strtok(NULL, " ");
 			if(strcmp(token, "init:") == 0) {
 				token = strtok(NULL, " ");
 				flight.init = atoi(token);
 				if(unit_conversion(flight.init) < time(NULL) - initialtime) {
 					command_wrong_format(bufcopy);
+					printf("Entered flight init is lower than system time.\n");
 					pipe_control(buflen, buffer, bufcopy, token);
 				}
 				printf("tempo de entrada no sistema: %d.\n", flight.init);
@@ -433,11 +516,11 @@ void pipe_control(int buflen, char *buffer, char *bufcopy, char *token) {
 		 				printf("NEW COMMAND => %s\n", bufcopy);
 		 				arr_list = add_arrival_list(arr_list, flight);
 		 				print_arrival_list(arr_list);
-		 				pthread_mutex_lock(&initializermutex);
+		 				pthread_mutex_lock(&arrivalmutex);
 		 				if(arr_list != NULL) {
-		 					pthread_cond_signal(&condvar);
+		 					pthread_cond_signal(&arrivalcond);
 		 				}
-		 				pthread_mutex_unlock(&initializermutex);
+		 				pthread_mutex_unlock(&arrivalmutex);
 		 			}
 		 			else command_wrong_format(bufcopy);
 		 		}
@@ -456,7 +539,6 @@ void read_pipe(void) {
 	char bufcopy[256];
 	int buflen = 0;
 	char *token = "";
-	//int  eta = 0, fuel = 0;
 
 	if((fd_named_pipe = open(PIPE_NAME, O_RDWR))<0) {
 			perror("Opening pipe.\n");
@@ -592,16 +674,27 @@ int main(int argc, char *argv[]) {
 		exit(-1);
 	}
 
-	if(pthread_create(&flight_initializer, NULL, create_arrival_flight, NULL) != 0) {
-		perror("Creating flight_initializer");
+	if(pthread_create(&arrival_initializer, NULL, create_arrival_flight, NULL) != 0) {
+		perror("Creating arrival flight initializer");
 		exit(-1);
 	}
+
+	if(pthread_create(&departure_initializer, NULL, create_departure_flight, NULL) != 0) {
+		perror("Creating deprature flight initializer.");
+		exit(-1);
+	}
+
 	read_pipe();
 
-	if(pthread_join(flight_initializer, NULL) != 0) {
+	if(pthread_join(arrival_initializer, NULL) != 0) {
 		perror("Joining flight initializer");
 		exit(-1);
 	} 
+
+	if(pthread_join(departure_initializer, NULL) != 0) {
+		perror("Joining departure initializer");
+		exit(-1);
+	}
 
 	for(int i=0; i<MAX_FLIGHTS_IN_SYSTEM; i++) {
 		if(pthread_join(flight_threads[i], NULL) != 0) {
