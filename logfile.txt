@@ -843,3 +843,211 @@ WRONG COMMAND => DEPARTURE TP01 init: 200 takeoff: 300
 NEW COMMAND => DEPARTURE TP02 init: 200 takeoff: 300
 
 PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 200 takeoff: 300
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+Departure flight [TP02] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+WRONG COMMAND => DEPARTURE TP02 init: 20 takeoff: 300
+
+WRONG COMMAND => DEPARTURE TP02 init: 40 takeoff: 300
+
+NEW COMMAND => DEPARTURE TP02 init: 60 takeoff: 300
+
+Departure flight [TP02] created at instant 60.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+WRONG COMMAND => ARRIVAL TP01 init: 50 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 80 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 80!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 80 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP01 init: 30 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 60 eta: 200 fuel: 1200
+
+Arrival flight [TP02] created at instant 60!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 30 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP02 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP02] created at instant 20!.
+Arrival flight [TP01] created at instant 30!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 30 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 30!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 30 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 30!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 20!.
+NEW COMMAND => DEPARTURE TP02 init: 600 takeoff: 300
+
+WRONG COMMAND => DEPARTURE TP03 init: 60 takeoff: 300
+
+WRONG COMMAND => DEPARTURE TP03 init: 80 takeoff: 300
+
+NEW COMMAND => DEPARTURE TP03 init: 100 takeoff: 300
+
+Departure flight [TP03] created at instant 100.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 40 takeoff: 300
+
+Departure flight [TP03] created at instant 40.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 20 takeoff: 300
+
+Departure flight [TP03] created at instant 20.
+WRONG COMMAND => ARRIVAL TP01 init: 20 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP01 init: 60 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 100 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 100!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 20 takeoff: 300
+
+Departure flight [TP03] created at instant 20.
+NEW COMMAND => ARRIVAL TP01 init: 100 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP01 init: 70 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP03 init: 90 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 100!.
+WRONG COMMAND => ARRIVAL TP03 init: 90 eta: 200 fuel: 1200
+
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 20 takeoff: 300
+
+Departure flight [TP03] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 20 takeoff: 300
+
+Departure flight [TP03] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP03 init: 90 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 30 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 30!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 20 takeoff: 300
+
+Departure flight [TP03] created at instant 20.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => ARRIVAL TP01 init: 20 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 20!.
+NEW COMMAND => DEPARTURE TP03 init: 30 takeoff: 300
+
+Departure flight [TP03] created at instant 30.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP03 init: 30 takeoff: 300
+
+WRONG COMMAND => DEPARTURE TP04 init: 10 takeoff: 300
+
+Departure flight [TP03] created at instant 0.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP04 init: 10 takeoff: 300
+
+Departure flight [TP04] created at instant 10.
+WRONG COMMAND => ARRIVAL TP01 init: 20 eta: 200 fuel: 1200
+
+NEW COMMAND => ARRIVAL TP01 init: 80 eta: 200 fuel: 1200
+
+WRONG COMMAND => ARRIVAL TP03 init: 66 eta: 200 fuel: 1200
+
+Arrival flight [TP01] created at instant 80!.
+PROGRAM FINISHED.
+PROGRAM STARTED.
+NEW COMMAND => DEPARTURE TP04 init: 10 takeoff: 300
+
+Departure flight [TP04] created at instant 10.
+PROGRAM FINISHED.

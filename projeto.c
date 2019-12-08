@@ -14,6 +14,7 @@ departures_list static_dep_list;
 arrival_list arr_list;
 arrival_list static_arr_list;
 struct sigaction *sigint;
+struct sigaction *sigusr1;
 int debugger = 0;
 time_t initialtime;
 
@@ -64,6 +65,13 @@ void create_shm(void) {
 	stats->avg_holdings_per_urgent_landing = 0.0;
 	stats->total_deviated_flights = 0;
 	stats->total_rejections = 0;
+
+	for(int i=0; i<MAX_FLIGHTS_IN_SYSTEM; i++) {
+		tower_shm->slot[i] = 0;
+		tower_shm->departure[i] = 0;
+		tower_shm->arrival[i] = 0;
+		tower_shm->holding[i] = 0;
+	}
 
 	printf("Shared memory values successfully initialized.\n");
 
@@ -306,9 +314,25 @@ int check_departure_flight_id(departure_flight flight, arrival_list arrhead, dep
 	}
 	return 0;
 }
+void add_to_total(void) {
+	sem_wait(stats_writing_sem);
+	stats->total_flights++;
+	sem_post(stats_writing_sem);
+	return;
+}
 
 void* arrival_flight_worker(void *flight) {
 	arrival_flight arrflight = *((arrival_flight*)flight);
+	ct_message msg;
+	flight_message flightmsg;
+	flightmsg.mtype = 1;
+	flightmsg.eta = arrflight.eta;
+	flightmsg.fuel = arrflight.fuel;
+	strcpy(flightmsg.flight_id, arrflight.flight_id);
+	if(msgsnd(mq_id, &flightmsg, sizeof(flightmsg), 0) == 0) printf("ARR MESSAGE SENT SUCCESSFULLY.\n");
+	if(msgrcv(mq_id, &msg, sizeof(msg), 1, 0) == sizeof(msg)) {
+		printf("[%s] arrival received message saying I'm in slot number %d\n", arrflight.flight_id, msg.slot);
+	}
 	sem_wait(mutex_sem);
 	pthread_mutex_lock(&mutex);
  	fprintf(logfile, "Arrival flight [%s] created at instant %d!.\n", arrflight.flight_id, arrflight.init);
@@ -316,11 +340,21 @@ void* arrival_flight_worker(void *flight) {
  	pthread_mutex_unlock(&mutex);
  	sem_post(mutex_sem);
  	printf("Arrival flight [%s] created at instant %d!.\n", arrflight.flight_id, arrflight.init);
+ 	add_to_total();
  	return NULL;
 }
 
 void* departure_flight_worker(void *flight) {
 	departure_flight depflight = *((departure_flight*)flight);
+	ct_message msg;
+	flight_message flightmsg;
+	flightmsg.mtype = 2;
+	flightmsg.takeoff = depflight.departure_time;
+	strcpy(flightmsg.flight_id, depflight.flight_id);
+	if(msgsnd(mq_id, &flightmsg, sizeof(flightmsg), 0) == 0) printf("DEP MESSAGE SENT SUCCESSFULLY.\n");
+	if(msgrcv(mq_id, &msg, sizeof(msg), 2, 0) == sizeof(msg)) {
+		printf("[%s] departure received message saying I'm in slot number %d\n", depflight.flight_id, msg.slot);
+	}
 	sem_wait(mutex_sem);
 	pthread_mutex_lock(&mutex);
 	fprintf(logfile, "Departure flight [%s] created at instant %d.\n", depflight.flight_id, depflight.init);
@@ -328,6 +362,7 @@ void* departure_flight_worker(void *flight) {
 	pthread_mutex_unlock(&mutex);
 	sem_post(mutex_sem);
 	printf("Departure flight [%s] created at instant %d.\n", depflight.flight_id, depflight.init);
+	add_to_total();
 	return NULL;
 }
 
@@ -606,8 +641,11 @@ void read_config(void) {
 
 void initializer(void) {
 	sigint = (struct sigaction*)malloc(sizeof(struct sigaction));
+	sigusr1 = (struct sigaction*)malloc(sizeof(struct sigaction));
 	sigint->sa_handler = cleanup;
 	sigint->sa_flags = 0;
+	sigusr1->sa_handler = print_stats;
+	sigusr1->sa_flags = 0;
 	initialtime = time(NULL);
 	create_departure_list(&dep_list);
 	create_arrival_list(&arr_list);
@@ -623,10 +661,55 @@ void initializer(void) {
 	printf("PROGRAM STARTED.\n");
 }
 
-void control_tower() {
-	
-	printf("Inside control tower.\n");
+void print_stats(int signum) {
+	sem_wait(stats_reading_sem);
+	printf("TOTAL FLIGHTS: %d\n", stats->total_flights);
+	printf("TOTAL LANDED FLIGHTS: %d\n", stats->total_landed_flights);
+	printf("AVERAGE ARRIVAL TIME: %f\n", stats->avg_arrival_time);
+	printf("TOTAL DEPARTURES: %d\n", stats->total_departures);
+	printf("AVERAGE DEPARTURE TIME: %f\n", stats->avg_departure_time);
+	printf("AVERAGE HOLDINGS PER LANDING: %f\n", stats->avg_holdings_per_landing);
+	printf("AVERAGE HOLDINGS PER URGENT LANDING: %f\n", stats->avg_holdings_per_urgent_landing);
+	printf("TOTAL DEVIATED FLIGHTS: %d\n", stats->total_deviated_flights);
+	printf("TOTAL REJECTIONS: %d\n", stats->total_rejections);
+	sem_post(stats_reading_sem);
+	return;
+}
 
+ct_message message_type(long type, ct_message msg, int slot) {
+	if(type == 1) {
+		printf("THIS IS AN ARRIVAL FLIGHT INSIDE MTYPE FUNC.\n");
+		msg.mtype = 1;
+		msg.slot = slot;
+	}
+	if(type == 2) {
+		printf("THIS IS A DEPARTURE FLIGHT INSIDE MTYPE FUNC.\n");
+		msg.mtype = 2;
+		msg.slot = slot;
+	}
+	return msg;
+}
+
+void control_tower(void) {
+
+	int slot = 0;
+	ct_message msg;
+	flight_message flightmsg;
+	
+	while(1) {
+		printf("INSIDE CT.\n");
+		if(msgrcv(mq_id, &flightmsg, sizeof(flightmsg), 2, IPC_NOWAIT) == sizeof(flightmsg)|| msgrcv(mq_id, &flightmsg, sizeof(flightmsg), 1, IPC_NOWAIT) == sizeof(flightmsg)) {
+		//fprintf(logfile, "Arrival message received by flight ID [%s] now has slot %d\n", flightmsg.flight_id, ++slot);
+			printf("Message received by flight ID [%s] now has slot %d\n", flightmsg.flight_id, ++slot);
+			msg = message_type(flightmsg.mtype, msg, slot);
+			msgsnd(mq_id, &msg, sizeof(ct_message), 0);
+		}
+		if(sigaction(SIGUSR1, sigusr1, NULL) < 0) {
+			perror("Calling sigusr1.");
+			exit(-1);
+		}
+		sleep(1);
+	}
 	return;
 }
 
@@ -659,8 +742,9 @@ int main(int argc, char *argv[]) {
 
 
 	if(id == 0) {
-		control_tower();
+		printf("Control tower created with ID %ld.\n", (long)getpid());
 		fprintf(logfile, "Control Tower created with PID %ld.\n", (long)getpid());
+		control_tower();
 		return 0;
 	}
 

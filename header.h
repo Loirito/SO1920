@@ -77,24 +77,27 @@ shmem *stats;
 
 typedef struct tower {
 	arrival_flight arrivalsarray[MAX_ARRIVAL];
-	departure_flight departurearray[MAX_DEPARTURE];	
+	departure_flight departurearray[MAX_DEPARTURE];
+	int slot[MAX_FLIGHTS_IN_SYSTEM];
+	int departure[MAX_FLIGHTS_IN_SYSTEM];
+	int	arrival[MAX_FLIGHTS_IN_SYSTEM];
+	int holding[MAX_FLIGHTS_IN_SYSTEM];
+	int rejected[MAX_FLIGHTS_IN_SYSTEM];
 } towershm;
 towershm *tower_shm;
 
 typedef struct ct_message {
-	int priority;
-	bool holding;
-	bool aterrar;
-	bool descolar;
+	long mtype;
+	int slot;
 }ct_message;
 
 typedef struct flight_message {
 	long mtype;
-	int init;
 	int eta;
 	int takeoff;
 	int fuel;
-	int flight_id;
+	char flight_id[8];
+	int priority;
 }flight_message;
 
 typedef struct config {
@@ -128,3 +131,5 @@ void read_config(void);
 void initializer(void);
 void control_tower(void); 
 void cleanup(int signum);
+void print_stats(int signum);
+void add_to_total();
